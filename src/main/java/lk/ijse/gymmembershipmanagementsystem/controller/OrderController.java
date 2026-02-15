@@ -1,21 +1,19 @@
 package lk.ijse.gymmembershipmanagementsystem.controller;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.SupplementDTO;
@@ -32,6 +30,8 @@ public class OrderController implements Initializable {
     private ComboBox<String> comboMemberId;
     @FXML
     private ComboBox<String> comboSupplementId;
+    @FXML
+    private Button btnPlaceOrder;
     @FXML
     private Label lblEmailValue;
     @FXML
@@ -60,6 +60,8 @@ public class OrderController implements Initializable {
     private TableView<OrderSupplementTM> tblOrderSupplement;
     @FXML
     private Label lblTotalValue;
+    @FXML
+    private Label lblDate;
 
     private final MemberModel memberModel = new MemberModel();
     private final SupplementModel supplementModel = new SupplementModel();
@@ -78,6 +80,26 @@ public class OrderController implements Initializable {
 
         loadMemberIds();
         loadSupplementIds();
+
+        TableColumn<OrderSupplementTM, Button> lastCol = (TableColumn<OrderSupplementTM, Button>) tblOrderSupplement.getColumns().get(5);
+
+        lastCol.setCellValueFactory(param -> {
+            Button btnDelete = new Button("Delete");
+
+            btnDelete.setOnAction(event -> {
+                tblOrderSupplement.getItems().remove(param.getValue());
+                tblOrderSupplement.getSelectionModel().clearSelection();
+                calculateTotal();
+                enableOrDisablePlaceOrderButton();
+            });
+
+            return new ReadOnlyObjectWrapper<>(btnDelete);
+        });
+        lblDate.setText(LocalDate.now().toString());
+    }
+
+    private void enableOrDisablePlaceOrderButton() {
+        btnPlaceOrder.setDisable(!(comboMemberId.getSelectionModel().getSelectedItem() != null && !tblOrderSupplement.getItems().isEmpty()));
     }
 
     private void loadMemberIds() {

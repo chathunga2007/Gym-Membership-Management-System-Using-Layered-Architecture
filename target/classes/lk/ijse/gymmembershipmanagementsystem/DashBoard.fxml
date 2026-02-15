@@ -138,7 +138,7 @@
 
             <VBox alignment="BOTTOM_CENTER" prefHeight="100.0" spacing="15.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#logout" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: linear-gradient(to right, #ff416c, #ff4b2b); -fx-background-radius: 25; -fx-text-fill: white; -fx-cursor: hand;" text="Log Out">
+                  <Button mnemonicParsing="false" onAction="#logout" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: linear-gradient(to right, #ff416c, #ff4b2b); -fx-background-radius: 25; -fx-text-fill: white; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="Log Out">
                      <font><Font name="System Bold" size="14.0" /></font>
                      <VBox.margin><Insets bottom="25.0" /></VBox.margin>
                   </Button>

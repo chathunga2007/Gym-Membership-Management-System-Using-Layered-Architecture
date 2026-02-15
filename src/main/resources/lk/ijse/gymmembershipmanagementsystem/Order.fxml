@@ -23,7 +23,7 @@
 
             <HBox spacing="20.0" VBox.vgrow="SOMETIMES">
                <children>
-                  <VBox prefWidth="500.0" spacing="20.0" style="-fx-background-color: rgba(255, 255, 255, 0.1); -fx-background-radius: 20; -fx-padding: 25;">
+                  <VBox prefHeight="712.0" prefWidth="520.0" spacing="20.0" style="-fx-background-color: rgba(255, 255, 255, 0.1); -fx-background-radius: 20; -fx-padding: 25;">
                      <children>
                         <Label text="Member Selection" textFill="#2ecc71"><font><Font name="System Bold" size="16.0" /></font></Label>
                         <GridPane vgap="15.0">
@@ -74,19 +74,28 @@
                               <RowConstraints />
                            </rowConstraints>
                         </GridPane>
-                        <Button maxWidth="Infinity" onAction="#handleAddToCart" prefHeight="45.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" text="ADD TO CART" />
+                        <Button maxWidth="Infinity" onAction="#handleAddToCart" prefHeight="45.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" stylesheets="@css/button-style.css" text="ADD TO CART" />
                      </children>
                   </VBox>
 
-                  <VBox spacing="15.0" style="-fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 20; -fx-padding: 10;" HBox.hgrow="ALWAYS">
+                  <VBox prefHeight="712.0" prefWidth="776.0" spacing="15.0" style="-fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 20; -fx-padding: 10;" HBox.hgrow="ALWAYS">
                      <children>
+                        <Label fx:id="lblDate" alignment="TOP_RIGHT" prefHeight="20.0" prefWidth="139.0" text="2026-02-14" textFill="WHITE">
+                           <font>
+                              <Font name="Times New Roman Bold" size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="600.0" />
+                           </VBox.margin>
+                        </Label>
                         <TableView fx:id="tblOrderSupplement" prefHeight="400.0" VBox.vgrow="ALWAYS">
                            <columns>
-                              <TableColumn fx:id="colSupplementId" text="ID" />
-                              <TableColumn fx:id="colSupplementName" prefWidth="200.0" text="Item Name" />
-                              <TableColumn fx:id="colSupplementPrice" text="Unit Price" />
-                              <TableColumn fx:id="colOrderQty" text="Qty" />
-                              <TableColumn fx:id="colSupplementTotal" text="Total" />
+                              <TableColumn fx:id="colSupplementId" prefWidth="100.17388862371445" text="ID" />
+                              <TableColumn fx:id="colSupplementName" prefWidth="244.59130859375" text="Item Name" />
+                              <TableColumn fx:id="colSupplementPrice" prefWidth="118.53912353515625" text="Unit Price" />
+                              <TableColumn fx:id="colOrderQty" prefWidth="75.1304931640625" text="Qty" />
+                              <TableColumn fx:id="colSupplementTotal" prefWidth="152.76513671875" text="Total" />
+                              <TableColumn prefWidth="90.156494140625" text="Delete" />
                            </columns>
                            <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
                         </TableView>
@@ -100,7 +109,7 @@
                                  </children>
                               </VBox>
                               <Button onAction="#reset" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 10;" stylesheets="@css/button-style.css" text="RESET" />
-                              <Button onAction="#handlePlaceOrder" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-font-size: 16;" stylesheets="@css/button-style.css" text="PLACE ORDER" />
+                              <Button fx:id="btnPlaceOrder" onAction="#handlePlaceOrder" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-font-size: 16;" stylesheets="@css/button-style.css" text="PLACE ORDER" />
                            </children>
                         </HBox>
                      </children>

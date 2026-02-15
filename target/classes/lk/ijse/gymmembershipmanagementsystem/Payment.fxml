@@ -53,7 +53,7 @@
                         <VBox spacing="5.0" GridPane.rowIndex="1">
                            <children>
                               <Label text="Payment Date" textFill="WHITE"><font><Font name="System Bold" size="13.0" /></font></Label>
-                              <DatePicker fx:id="dateCombo" maxWidth="1.7976931348623157E308" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10; -fx-pref-height: 35;" />
+                              <DatePicker fx:id="dateCombo" maxWidth="1.7976931348623157E308" promptText="Select Payment Date:" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10; -fx-pref-height: 35;" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -66,10 +66,10 @@
                   </GridPane>
                   <HBox alignment="CENTER_RIGHT" spacing="15.0">
                      <children>
-                        <Button onAction="#reset" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" text="RESET" />
-                        <Button onAction="#delete" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" text="DELETE" />
-                        <Button onAction="#update" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" text="UPDATE" />
-                        <Button onAction="#save" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" text="SUBMIT PAYMENT" />
+                        <Button onAction="#reset" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" stylesheets="@css/button-style.css" text="RESET" />
+                        <Button onAction="#delete" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" stylesheets="@css/button-style.css" text="DELETE" />
+                        <Button onAction="#update" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" stylesheets="@css/button-style.css" text="UPDATE" />
+                        <Button onAction="#save" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;" stylesheets="@css/button-style.css" text="SUBMIT PAYMENT" />
                      </children>
                   </HBox>
                </children>

@@ -106,10 +106,10 @@
 
                         <HBox alignment="CENTER_LEFT" spacing="15.0">
                            <children>
-                              <Button onAction="#reset" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" text="RESET" />
-                              <Button onAction="#delete" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" text="DELETE" />
-                              <Button onAction="#update" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" text="UPDATE" />
-                              <Button onAction="#save" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(46, 204, 113, 0.4), 10, 0, 0, 0);" text="CREATE SESSION" />
+                              <Button onAction="#reset" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="RESET" />
+                              <Button onAction="#delete" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="DELETE" />
+                              <Button onAction="#update" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="UPDATE" />
+                              <Button onAction="#save" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(46, 204, 113, 0.4), 10, 0, 0, 0);" stylesheets="@css/button-style.css" text="CREATE SESSION" />
                            </children>
                         </HBox>
                      </children>

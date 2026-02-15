@@ -50,19 +50,19 @@
                         <VBox spacing="5.0" GridPane.columnIndex="1">
                            <children>
                               <Label text="Full Name" textFill="WHITE"><font><Font name="System Bold" size="13.0" /></font></Label>
-                              <TextField fx:id="nameField" promptText="Enter trainer name" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10; -fx-pref-height: 35;" />
+                              <TextField fx:id="nameField" promptText="Enter trainer name:" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10; -fx-pref-height: 35;" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0" GridPane.rowIndex="1">
                            <children>
                               <Label text="Age" textFill="WHITE"><font><Font name="System Bold" size="13.0" /></font></Label>
-                              <TextField fx:id="ageField" promptText="Years" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10; -fx-pref-height: 35;" />
+                              <TextField fx:id="ageField" promptText="Enter your age:" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10; -fx-pref-height: 35;" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
                               <Label text="NIC Number" textFill="WHITE"><font><Font name="System Bold" size="13.0" /></font></Label>
-                              <TextField fx:id="nicField" promptText="Enter NIC" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10; -fx-pref-height: 35;" />
+                              <TextField fx:id="nicField" promptText="Enter NIC:" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10; -fx-pref-height: 35;" />
                            </children>
                         </VBox>
                         <VBox spacing="5.0" GridPane.rowIndex="2">
@@ -74,17 +74,17 @@
                         <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
                               <Label text="Email Address" textFill="WHITE"><font><Font name="System Bold" size="13.0" /></font></Label>
-                              <TextField fx:id="emailField" promptText="example@mail.com" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10; -fx-pref-height: 35;" />
+                              <TextField fx:id="emailField" promptText="example@gmail.com" style="-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10; -fx-pref-height: 35;" />
                            </children>
                         </VBox>
                      </children>
                   </GridPane>
                   <HBox alignment="CENTER_RIGHT" spacing="15.0">
                      <children>
-                        <Button onAction="#reset" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" text="RESET" />
-                        <Button onAction="#delete" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" text="DELETE" />
-                        <Button onAction="#update" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" text="UPDATE" />
-                        <Button onAction="#save" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" text="REGISTER TRAINER" />
+                        <Button onAction="#reset" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="RESET" />
+                        <Button onAction="#delete" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="DELETE" />
+                        <Button onAction="#update" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="UPDATE" />
+                        <Button onAction="#save" prefHeight="40.0" prefWidth="174.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="REGISTER TRAINER" />
                      </children>
                   </HBox>
                </children>

@@ -111,10 +111,10 @@
 
                   <HBox alignment="CENTER_RIGHT" spacing="15.0">
                      <children>
-                        <Button fx:id="resetBtn" onAction="#reset" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" text="RESET" />
-                        <Button fx:id="deleteBtn" onAction="#delete" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" text="DELETE" />
-                        <Button fx:id="updateBtn" onAction="#update" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" text="UPDATE" />
-                        <Button fx:id="saveBtn" onAction="#save" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(46, 204, 113, 0.4), 10, 0, 0, 0);" text="SAVE MEMBER" />
+                        <Button fx:id="resetBtn" onAction="#reset" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="RESET" />
+                        <Button fx:id="deleteBtn" onAction="#delete" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="DELETE" />
+                        <Button fx:id="updateBtn" onAction="#update" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;" stylesheets="@css/button-style.css" text="UPDATE" />
+                        <Button fx:id="saveBtn" onAction="#save" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(46, 204, 113, 0.4), 10, 0, 0, 0);" stylesheets="@css/button-style.css" text="SAVE MEMBER" />
                      </children>
                      <VBox.margin>
                         <Insets top="10.0" />
