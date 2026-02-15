@@ -16,7 +16,7 @@ public class DashBoardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("Dash Board is loaded!");
+        System.out.println("Dash Board Controller is loaded!");
         try {
             clickDashBoard();
         } catch (IOException e) {
