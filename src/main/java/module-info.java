@@ -13,8 +13,8 @@ module lk.ijse.gymmembershipmanagementsystem {
     exports lk.ijse.gymmembershipmanagementsystem;
     opens lk.ijse.gymmembershipmanagementsystem.controller to javafx.fxml;
     exports lk.ijse.gymmembershipmanagementsystem.controller;
-    opens lk.ijse.gymmembershipmanagementsystem.model to javafx.fxml;
-    exports lk.ijse.gymmembershipmanagementsystem.model;
+    opens lk.ijse.gymmembershipmanagementsystem.dao to javafx.fxml;
+    exports lk.ijse.gymmembershipmanagementsystem.dao;
     opens lk.ijse.gymmembershipmanagementsystem.dto to javafx.base;
     exports lk.ijse.gymmembershipmanagementsystem.dto;
     opens lk.ijse.gymmembershipmanagementsystem.db to javafx.fxml;

@@ -13,9 +13,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.EquipmentDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.SessionDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.EquipmentDAOImpl;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.SessionDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.*;
-import lk.ijse.gymmembershipmanagementsystem.model.EquipmentModel;
-import lk.ijse.gymmembershipmanagementsystem.model.SessionModel;
 
 public class SessionController implements Initializable {
     
@@ -44,7 +46,8 @@ public class SessionController implements Initializable {
     @FXML
     private ListView<EquipmentDTO> equipmentListView;
     
-    SessionModel sessionModel = new SessionModel();
+    SessionDAO sessionDAO = new SessionDAOImpl();
+    EquipmentDAO equipmentDAO = new EquipmentDAOImpl();
 
     private final String DURATION_REGEX = "^[1-9][0-9]{0,3}$";
     
@@ -136,7 +139,7 @@ public class SessionController implements Initializable {
             try {
 
                 SessionDTO sessionDTO = new SessionDTO(selectSlotID, selectTrainerID, sessionType, Integer.parseInt(duration));
-                boolean result = sessionModel.save(sessionDTO, equipmentIDs);
+                boolean result = sessionDAO.save(sessionDTO, equipmentIDs);
                 
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -167,7 +170,7 @@ public class SessionController implements Initializable {
 
         try {
             SessionDTO sessionDTO = new SessionDTO(Integer.parseInt(id), selectSlotID, selectTrainerID, sessionType, Integer.parseInt(duration));
-            boolean result = sessionModel.update(sessionDTO);
+            boolean result = sessionDAO.update(sessionDTO);
             if (result) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Session Update");
@@ -193,7 +196,7 @@ public class SessionController implements Initializable {
         String id = sessionIDField.getText();
 
         try {
-            boolean result = sessionModel.delete(id);
+            boolean result = sessionDAO.delete(id);
             if (result) {
                 new Alert(Alert.AlertType.INFORMATION, "Session deleted successfully!").show();
                 cleanFileds();
@@ -214,7 +217,7 @@ public class SessionController implements Initializable {
             try {
                 String id = sessionIDField.getText();
 
-                SessionDTO sessionDTO = sessionModel.search(id);
+                SessionDTO sessionDTO = sessionDAO.search(id);
 
                 if(sessionDTO!=null) {
                     sessionTypeCombo.setValue(sessionDTO.getSessionType());
@@ -260,7 +263,7 @@ public class SessionController implements Initializable {
     
     private void loadTrainerID(){
         try {
-            ObservableList<TrainerDTO> idList = sessionModel.loadTrainerID();
+            ObservableList<TrainerDTO> idList = sessionDAO.loadTrainerID();
             trainerIDComboBox.setItems(idList);
             trainerIDComboBox.setCellFactory(cb -> new ListCell<TrainerDTO>() {
                 @Override
@@ -291,7 +294,7 @@ public class SessionController implements Initializable {
     
     private void loadSlotID(){
         try {
-            ObservableList<TimeSlotDTO> idList = sessionModel.loadSlotID();
+            ObservableList<TimeSlotDTO> idList = sessionDAO.loadSlotID();
             slotIDComboBox.setItems(idList);
             slotIDComboBox.setCellFactory(cb -> new ListCell<TimeSlotDTO>() {
                 @Override
@@ -324,7 +327,7 @@ public class SessionController implements Initializable {
     public void loadSessionTable() {
         try {
 
-            List<SessionDTO> sessionList = sessionModel.getAllSession();
+            List<SessionDTO> sessionList = sessionDAO.getAllSession();
 
             ObservableList<SessionDTO> obList = FXCollections.observableArrayList();
 
@@ -363,7 +366,7 @@ public class SessionController implements Initializable {
         try {
             ObservableList<EquipmentDTO> list =
                     FXCollections.observableArrayList(
-                            EquipmentModel.getAllEquipment()
+                            equipmentDAO.getAllEquipment()
                     );
             equipmentListView.setItems(list);
             equipmentListView.getSelectionModel()

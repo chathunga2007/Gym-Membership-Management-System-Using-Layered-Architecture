@@ -14,8 +14,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.PrivateSessionDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.PrivateSessionDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.*;
-import lk.ijse.gymmembershipmanagementsystem.model.PrivateSessionModel;
 
 public class PrivateSessionController implements Initializable {
 
@@ -42,7 +43,7 @@ public class PrivateSessionController implements Initializable {
     @FXML
     private TableColumn extraChargesColumn;
 
-    PrivateSessionModel privateSessionModel =  new PrivateSessionModel();
+    PrivateSessionDAO  privateSessionDAO = new PrivateSessionDAOImpl();
 
     private final String TIME_IN_REGEX = "^(?:[01]\\d|2[0-3]):(?:[0-5]\\d):(?:[0-5]\\d)$";
     private final String TIME_OUT_REGEX = "^(?:[01]\\d|2[0-3]):(?:[0-5]\\d):(?:[0-5]\\d)$";
@@ -103,7 +104,7 @@ public class PrivateSessionController implements Initializable {
                 LocalDate date = java.time.LocalDate.now();
                 PrivateSessionDTO privateSessionDTO = new PrivateSessionDTO(selectMemberID, timeIn, timeOut, Double.parseDouble(extraCharges));
                 PaymentDTO paymentDTO = new PaymentDTO(selectMemberID, Double.parseDouble(extraCharges), date);
-                boolean result = privateSessionModel.saveWithPayment(privateSessionDTO, paymentDTO);
+                boolean result = privateSessionDAO.saveWithPayment(privateSessionDTO, paymentDTO);
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Private Session Management");
@@ -150,7 +151,7 @@ public class PrivateSessionController implements Initializable {
         } else {
             try {
                 PrivateSessionDTO privateSessionDTO = new PrivateSessionDTO(Integer.parseInt(id), selectMemberID, timeIn, timeOut, Double.parseDouble(extraCharges));
-                boolean result = privateSessionModel.update(privateSessionDTO);
+                boolean result = privateSessionDAO.update(privateSessionDTO);
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Private Session Update");
@@ -177,7 +178,7 @@ public class PrivateSessionController implements Initializable {
         String id = privateSessionField.getText().trim();
 
         try {
-            boolean result = privateSessionModel.delete(id);
+            boolean result = privateSessionDAO.delete(id);
             if (result) {
                 new Alert(Alert.AlertType.INFORMATION, "Private Session deleted successfully!").show();
                 cleanFileds();
@@ -211,7 +212,7 @@ public class PrivateSessionController implements Initializable {
             try {
                 String id = privateSessionField.getText();
 
-                PrivateSessionDTO privateSessionDTO = privateSessionModel.search(id);
+                PrivateSessionDTO privateSessionDTO = privateSessionDAO.search(id);
 
                 if(privateSessionDTO!=null) {
                     timeInField.setText(privateSessionDTO.getTimeIn());
@@ -237,7 +238,7 @@ public class PrivateSessionController implements Initializable {
     @FXML
     private void loadPrivateSessionTable() {
         try {
-            List<PrivateSessionDTO> privateSessionList = privateSessionModel.getAllPrivateSession();
+            List<PrivateSessionDTO> privateSessionList = privateSessionDAO.getAllPrivateSession();
             ObservableList<PrivateSessionDTO> obList = FXCollections.observableArrayList();
 
             for (PrivateSessionDTO privateSessionDTO : privateSessionList) {
@@ -254,7 +255,7 @@ public class PrivateSessionController implements Initializable {
 
     private void loadMemberID(){
         try {
-            ObservableList<MemberDTO> idList = privateSessionModel.loadMemberID();
+            ObservableList<MemberDTO> idList = privateSessionDAO.loadMemberID();
             memberIDComboBox.setItems(idList);
             memberIDComboBox.setCellFactory(cb -> new ListCell<MemberDTO>() {
                 @Override

@@ -12,8 +12,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.EquipmentDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.EquipmentDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.EquipmentDTO;
-import lk.ijse.gymmembershipmanagementsystem.model.EquipmentModel;
 
 public class EquipmentController implements Initializable {
     
@@ -38,7 +39,7 @@ public class EquipmentController implements Initializable {
 
     private final String QTY_REGEX = "^[0-9 ]{1,}$";
     
-    private final EquipmentModel equipmentModel = new EquipmentModel();
+    private final EquipmentDAO equipmentDAO = new EquipmentDAOImpl();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -98,7 +99,7 @@ public class EquipmentController implements Initializable {
         } else {
             try {
             EquipmentDTO equipmentDTO = new EquipmentDTO(name, Integer.parseInt(qty), availability);
-            boolean result = equipmentModel.save(equipmentDTO);
+            boolean result = equipmentDAO.save(equipmentDTO);
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Equipment Management");
@@ -139,7 +140,7 @@ public class EquipmentController implements Initializable {
 
             try {
                 EquipmentDTO equipmentDTO = new EquipmentDTO(Integer.parseInt(id), name, Integer.parseInt(qty), availability);
-                boolean result = equipmentModel.update(equipmentDTO);
+                boolean result = equipmentDAO.update(equipmentDTO);
 
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -167,7 +168,7 @@ public class EquipmentController implements Initializable {
         String id = idField.getText().trim();
 
         try {
-            boolean result = equipmentModel.delete( id);
+            boolean result = equipmentDAO.delete( id);
 
             if (result) {
                 new Alert(Alert.AlertType.INFORMATION, "Equipment deleted successfully!").show();
@@ -189,7 +190,7 @@ public class EquipmentController implements Initializable {
             try {
                 String id = idField.getText();
                 
-                EquipmentDTO equipmentDTO = equipmentModel.search(id);
+                EquipmentDTO equipmentDTO = equipmentDAO.search(id);
                 
                 if(equipmentDTO!=null) {
                     nameCombo.setValue(equipmentDTO.getName());
@@ -222,7 +223,7 @@ public class EquipmentController implements Initializable {
     public void loadEquipmentTable() {
         try {
             
-            List<EquipmentDTO> equipmentList = equipmentModel.getAllEquipment();
+            List<EquipmentDTO> equipmentList = equipmentDAO.getAllEquipment();
             
             ObservableList<EquipmentDTO> obList = FXCollections.observableArrayList();
             

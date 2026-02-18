@@ -7,16 +7,15 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import lk.ijse.gymmembershipmanagementsystem.db.DBConnection;
-import lk.ijse.gymmembershipmanagementsystem.model.DashBoardModel;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.DashBoardDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.MainContentDashBoardDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.DashBoardDAOImpl;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.MainContentDashBoardDAOImpl;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class MainContentDashBoardController implements Initializable {
     @FXML
@@ -35,6 +34,9 @@ public class MainContentDashBoardController implements Initializable {
     private ListView<String> listTodaySessions;
     @FXML
     private LineChart<String, Number> incomeChart;
+
+    MainContentDashBoardDAO  mainContentDashBoardDAO = new MainContentDashBoardDAOImpl();
+    DashBoardDAO  dashBoardDAO = new DashBoardDAOImpl();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -72,55 +74,25 @@ public class MainContentDashBoardController implements Initializable {
 
     private void loadSummaryData() {
         try {
-            lblTotalMembers.setText(String.valueOf(DashBoardModel.getTotalMembers()));
-            lblTotalTrainers.setText(String.valueOf(DashBoardModel.getTotalTrainers()));
-            lblTodaySessions.setText(String.valueOf(DashBoardModel.getTodaySessions()));
-            lblIncome.setText("Rs. " + DashBoardModel.getTodayIncome());
+            lblTotalMembers.setText(String.valueOf(dashBoardDAO.getTotalMembers()));
+            lblTotalTrainers.setText(String.valueOf(dashBoardDAO.getTotalTrainers()));
+            lblTodaySessions.setText(String.valueOf(dashBoardDAO.getTodaySessions()));
+            lblIncome.setText("Rs. " + dashBoardDAO.getTodayIncome());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void loadTodaySessions() {
-
         listTodaySessions.getItems().clear();
 
-        String sql = """
-        
-                SELECT
-            t.timeIn,
-            t.timeOut,
-            s.sessionType,
-            tr.name AS trainerName
-        FROM Session s
-        LEFT JOIN Time_Slot t ON s.slotID = t.slotID
-        LEFT JOIN Trainer tr ON s.trainerID = tr.trainerID
-        WHERE t.date = DATE(CONVERT_TZ(NOW(), 'SYSTEM', '+05:30'))
-        ORDER BY t.timeIn;
-        """;
-
         try {
-            ResultSet rs = DBConnection.getInstance()
-                    .getConnection()
-                    .createStatement()
-                    .executeQuery(sql);
+            List<String> sessions = mainContentDashBoardDAO.getTodaySessions();
 
-            boolean hasData = false;
-
-            while (rs.next()) {
-                hasData = true;
-
-                String row =
-                        rs.getTime("timeIn") + " - " +
-                                rs.getTime("timeOut") + " | " +
-                                rs.getString("sessionType") +
-                                " (Trainer: " + rs.getString("trainerName") + ")";
-
-                listTodaySessions.getItems().add(row);
-            }
-
-            if (!hasData) {
+            if (sessions.isEmpty()) {
                 listTodaySessions.getItems().add("No sessions scheduled for today");
+            } else {
+                listTodaySessions.getItems().addAll(sessions);
             }
 
         } catch (Exception e) {
@@ -129,48 +101,17 @@ public class MainContentDashBoardController implements Initializable {
     }
 
     private void loadDailyIncomeChart() {
-
         incomeChart.getData().clear();
-
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Daily Income");
 
-        String sql = """
-        SELECT d, SUM(total) AS income
-        FROM (
-            SELECT date AS d, SUM(amount) AS total
-            FROM Payment
-            GROUP BY date
-
-            UNION ALL
-
-            SELECT o.date AS d, SUM(oi.price * oi.qty) AS total
-            FROM orders o
-            JOIN order_items oi ON o.id = oi.order_id
-            GROUP BY o.date
-        ) x
-        GROUP BY d
-        ORDER BY d
-    """;
         try {
-            ResultSet rs = DBConnection.getInstance()
-                    .getConnection()
-                    .createStatement()
-                    .executeQuery(sql);
+            Map<String, Double> incomeData = mainContentDashBoardDAO.getDailyIncomeData();
 
-            boolean hasData = false;
-
-            while (rs.next()) {
-                hasData = true;
-                series.getData().add(
-                        new XYChart.Data<>(
-                                rs.getDate("d").toString(),
-                                rs.getDouble("income")
-                        )
-                );
-            }
-
-            if (hasData) {
+            if (!incomeData.isEmpty()) {
+                for (Map.Entry<String, Double> entry : incomeData.entrySet()) {
+                    series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+                }
                 incomeChart.getData().add(series);
             }
 
