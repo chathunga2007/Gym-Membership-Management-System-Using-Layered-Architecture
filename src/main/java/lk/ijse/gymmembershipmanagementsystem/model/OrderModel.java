@@ -2,7 +2,7 @@ package lk.ijse.gymmembershipmanagementsystem.model;
 
 import lk.ijse.gymmembershipmanagementsystem.db.DBConnection;
 import lk.ijse.gymmembershipmanagementsystem.dto.OrderDTO;
-import lk.ijse.gymmembershipmanagementsystem.util.CrudUtil;
+import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lk.ijse.gymmembershipmanagementsystem.dto.TimeSlotDTO;
-import lk.ijse.gymmembershipmanagementsystem.util.CrudUtil;
+import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 
 public class TimeSlotModel {
     

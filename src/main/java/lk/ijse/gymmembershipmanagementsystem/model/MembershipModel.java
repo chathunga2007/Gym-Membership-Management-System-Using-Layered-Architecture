@@ -12,7 +12,7 @@ import javafx.collections.ObservableList;
 import lk.ijse.gymmembershipmanagementsystem.db.DBConnection;
 import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.MembershipDTO;
-import lk.ijse.gymmembershipmanagementsystem.util.CrudUtil;
+import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 
 public class MembershipModel {
     public boolean save(MembershipDTO membershipDTO) throws SQLException {

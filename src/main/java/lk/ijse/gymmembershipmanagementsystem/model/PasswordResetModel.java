@@ -1,7 +1,7 @@
 package lk.ijse.gymmembershipmanagementsystem.model;
 
 import java.sql.ResultSet;
-import lk.ijse.gymmembershipmanagementsystem.util.CrudUtil;
+import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 
 public class PasswordResetModel {
 

@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import lk.ijse.gymmembershipmanagementsystem.dto.EquipmentDTO;
-import lk.ijse.gymmembershipmanagementsystem.util.CrudUtil;
+import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 
 public class EquipmentModel {
     public boolean save(EquipmentDTO equipmentDTO) throws SQLException {   

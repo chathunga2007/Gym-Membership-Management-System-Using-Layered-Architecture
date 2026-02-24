@@ -1,7 +1,7 @@
 package lk.ijse.gymmembershipmanagementsystem.model;
 
 import lk.ijse.gymmembershipmanagementsystem.dto.SupplementDTO;
-import lk.ijse.gymmembershipmanagementsystem.util.CrudUtil;
+import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package lk.ijse.gymmembershipmanagementsystem.util;
+package lk.ijse.gymmembershipmanagementsystem.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

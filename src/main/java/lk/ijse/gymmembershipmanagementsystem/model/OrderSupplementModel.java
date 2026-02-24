@@ -1,7 +1,7 @@
 package lk.ijse.gymmembershipmanagementsystem.model;
 
 import lk.ijse.gymmembershipmanagementsystem.dto.OrderSupplementDTO;
-import lk.ijse.gymmembershipmanagementsystem.util.CrudUtil;
+import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 import java.util.List;
 
 public class OrderSupplementModel {
