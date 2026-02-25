@@ -1,13 +1,14 @@
 package lk.ijse.gymmembershipmanagementsystem.controller;
 
-import lk.ijse.gymmembershipmanagementsystem.model.PasswordResetModel;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.PasswordResetDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.PasswordResetDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.model.UserModel;
 import lk.ijse.gymmembershipmanagementsystem.util.EmailUtil;
 import lk.ijse.gymmembershipmanagementsystem.util.OTPUtil;
 
 public class PasswordResetController {
     private final UserModel user = new UserModel();
-    private final PasswordResetModel otpModel = new PasswordResetModel();
+    private final PasswordResetDAO otpModel = new PasswordResetDAOImpl();
 
     public void sendOTP(String email) throws Exception {
         if (!user.emailExists(email))

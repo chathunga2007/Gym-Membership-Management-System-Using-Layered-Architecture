@@ -1,51 +1,31 @@
-package lk.ijse.gymmembershipmanagementsystem.model;
+package lk.ijse.gymmembershipmanagementsystem.dao.custom.impl;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import lk.ijse.gymmembershipmanagementsystem.db.DBConnection;
+import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.PaymentDAO;
 import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.PaymentDTO;
-import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentModel {
-
+public class PaymentDAOImpl implements PaymentDAO {
+    @Override
     public boolean save(PaymentDTO paymentDTO) throws SQLException {
+        boolean result = CrudUtil.execute(
+                "INSERT INTO Payment (memberID, date, amount) VALUES (?, ?, ?)",
+                paymentDTO.getMemberId(),
+                paymentDTO.getPaymentDate(),
+                paymentDTO.getAmount()
+        );
 
-        Connection con = DBConnection.getInstance().getConnection();
-        con.setAutoCommit(false);
-
-        try {
-            boolean result = CrudUtil.execute(
-                    "INSERT INTO Payment (memberID, date, amount) VALUES (?, ?, ?)",
-                    paymentDTO.getMemberId(),
-                    paymentDTO.getPaymentDate(),
-                    paymentDTO.getAmount()
-            );
-
-            if (result) {
-                con.commit();
-                return true;
-            } else {
-                con.rollback();
-                return false;
-            }
-
-        } catch (Exception e) {
-            con.rollback();
-            throw e;
-        } finally {
-            con.setAutoCommit(true);
-        }
+        return result;
     }
 
+    @Override
     public boolean update(PaymentDTO paymentDTO) throws SQLException {
         boolean result = CrudUtil.execute(
                 "UPDATE Payment SET memberID = ?, date = ?, amount = ? WHERE paymentID = ?",
@@ -57,6 +37,7 @@ public class PaymentModel {
         return result;
     }
 
+    @Override
     public boolean delete(String id) throws SQLException {
         boolean result = CrudUtil.execute(
                 "DELETE FROM Payment WHERE paymentID = ?",
@@ -65,6 +46,7 @@ public class PaymentModel {
         return result;
     }
 
+    @Override
     public PaymentDTO search(String id) throws SQLException {
         ResultSet rs = CrudUtil.execute("SELECT * FROM Payment WHERE paymentID = ?", id);
 
@@ -78,8 +60,8 @@ public class PaymentModel {
         return  null;
     }
 
+    @Override
     public List<PaymentDTO> getAllPayment() throws SQLException {
-
         List<PaymentDTO> paymentList = new ArrayList();
         ResultSet  result = CrudUtil.execute("SELECT * FROM Payment ORDER BY paymentID DESC");
 
@@ -98,16 +80,13 @@ public class PaymentModel {
         return paymentList;
     }
 
-    public ObservableList<MemberDTO> loadMemberID()throws SQLException {
+    @Override
+    public ObservableList<MemberDTO> loadMemberID() throws SQLException {
+        ResultSet rs = CrudUtil.execute("SELECT memberID, name FROM Member");
+
         ObservableList<MemberDTO> memberDTOS = FXCollections.observableArrayList();
 
-        DBConnection dbc = DBConnection.getInstance();
-        Connection conn = dbc.getConnection();
-
-        String sql = "SELECT memberID , name FROM Member";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        ResultSet rs = pstmt.executeQuery();
-        while(rs.next()){
+        while (rs.next()) {
             memberDTOS.add(new MemberDTO(
                     rs.getInt("memberID"),
                     rs.getString("name")

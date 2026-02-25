@@ -15,10 +15,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.PaymentDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.PaymentDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.db.DBConnection;
 import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.PaymentDTO;
-import lk.ijse.gymmembershipmanagementsystem.model.PaymentModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -43,7 +44,7 @@ public class PaymentController implements Initializable {
     @FXML
     private TableColumn memberIDColumn;
 
-    PaymentModel paymentModel =  new PaymentModel();
+    PaymentDAO paymentDAO =  new PaymentDAOImpl();
 
     private final String AMOUNT_REGEX = "^[0-9]+(\\.[0-9]{1})?$";
 
@@ -89,7 +90,7 @@ public class PaymentController implements Initializable {
         }  else {
             try {
                 PaymentDTO paymentDTO = new PaymentDTO(selectedMemberID, Double.parseDouble(amount), date);
-                boolean result = paymentModel.save(paymentDTO);
+                boolean result = paymentDAO.save(paymentDTO);
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Payment Management");
@@ -125,7 +126,7 @@ public class PaymentController implements Initializable {
         }   else {
             try {
                 PaymentDTO paymentDTO = new PaymentDTO(Integer.parseInt(id), selectedMemberID, Double.parseDouble(amount), date);
-                boolean result = paymentModel.update(paymentDTO);
+                boolean result = paymentDAO.update(paymentDTO);
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Payment Management");
@@ -151,7 +152,7 @@ public class PaymentController implements Initializable {
         String id =   idField.getText().trim();
 
         try {
-            boolean result= paymentModel.delete(id);
+            boolean result= paymentDAO.delete(id);
             if (result) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Payment Management");
@@ -190,7 +191,7 @@ public class PaymentController implements Initializable {
             try {
                 String id = idField.getText();
 
-                PaymentDTO paymentDTO = paymentModel.search(id);
+                PaymentDTO paymentDTO = paymentDAO.search(id);
 
                 if(paymentDTO!=null) {
                     dateCombo.setValue(paymentDTO.getPaymentDate());
@@ -215,7 +216,7 @@ public class PaymentController implements Initializable {
     @FXML
     private void loadPaymentTable() {
         try {
-            List<PaymentDTO> paymentList = paymentModel.getAllPayment();
+            List<PaymentDTO> paymentList = paymentDAO.getAllPayment();
             ObservableList<PaymentDTO> obList = FXCollections.observableArrayList();
 
             for (PaymentDTO paymentDTO : paymentList) {
@@ -232,7 +233,7 @@ public class PaymentController implements Initializable {
 
     private void loadMemberID(){
         try {
-            ObservableList<MemberDTO> idList = paymentModel.loadMemberID();
+            ObservableList<MemberDTO> idList = paymentDAO.loadMemberID();
             memberIDComboBox.setItems(idList);
             memberIDComboBox.setCellFactory(cb -> new ListCell<MemberDTO>() {
                 @Override

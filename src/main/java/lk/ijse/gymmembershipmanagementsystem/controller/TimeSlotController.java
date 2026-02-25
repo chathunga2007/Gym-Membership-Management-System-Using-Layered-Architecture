@@ -13,8 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.TimeSlotDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.TimeSlotDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.TimeSlotDTO;
-import lk.ijse.gymmembershipmanagementsystem.model.TimeSlotModel;
 
 public class TimeSlotController implements Initializable {
     
@@ -39,7 +40,7 @@ public class TimeSlotController implements Initializable {
     
     private final String TIME_REGEX = "^(?:[01]\\d|2[0-3]):(?:[0-5]\\d):(?:[0-5]\\d)$";
     
-    private final TimeSlotModel slotModel = new TimeSlotModel();
+    private final TimeSlotDAO slotDAO = new TimeSlotDAOImpl();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -78,7 +79,7 @@ public class TimeSlotController implements Initializable {
         } else {
             try {
                 TimeSlotDTO slotDTO = new TimeSlotDTO(date, timeIn, timeOut);
-                boolean result = slotModel.save(slotDTO);
+                boolean result = slotDAO.save(slotDTO);
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Time Slot Management");
@@ -123,7 +124,7 @@ public class TimeSlotController implements Initializable {
 
             try {
                 TimeSlotDTO slotDTO = new TimeSlotDTO(Integer.parseInt(id), date, timeIn, timeOut);
-                boolean result = slotModel.update(slotDTO);
+                boolean result = slotDAO.update(slotDTO);
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Time Slot Update");
@@ -150,7 +151,7 @@ public class TimeSlotController implements Initializable {
         String id = idField.getText().trim();
         
         try {
-            boolean result = slotModel.delete(id);
+            boolean result = slotDAO.delete(id);
             if (result) {
                 new Alert(Alert.AlertType.INFORMATION, "Time slot deleted successfully!").show();
                 cleanFileds();
@@ -184,7 +185,7 @@ public class TimeSlotController implements Initializable {
             try {
                 String id = idField.getText();
                 
-                TimeSlotDTO slotDTO = slotModel.search(id);
+                TimeSlotDTO slotDTO = slotDAO.search(id);
                 
                 if(slotDTO!=null) {
                     dateCombo.setValue(slotDTO.getDate());
@@ -205,7 +206,7 @@ public class TimeSlotController implements Initializable {
     public void loadTimeSlotTable() {
         try {
             
-            List<TimeSlotDTO> slotList = slotModel.getAllTimeSlot();
+            List<TimeSlotDTO> slotList = slotDAO.getAllTimeSlot();
             
             ObservableList<TimeSlotDTO> obList = FXCollections.observableArrayList();
             

@@ -13,8 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.EquipmentDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.EquipmentDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.*;
-import lk.ijse.gymmembershipmanagementsystem.model.EquipmentModel;
 import lk.ijse.gymmembershipmanagementsystem.model.SessionModel;
 
 public class SessionController implements Initializable {
@@ -360,10 +361,11 @@ public class SessionController implements Initializable {
     }
 
     private void loadEquipment() {
+        EquipmentDAO equipmentDAO = new EquipmentDAOImpl();
         try {
             ObservableList<EquipmentDTO> list =
                     FXCollections.observableArrayList(
-                            EquipmentModel.getAllEquipment()
+                            equipmentDAO.getAllEquipment()
                     );
             equipmentListView.setItems(list);
             equipmentListView.getSelectionModel()

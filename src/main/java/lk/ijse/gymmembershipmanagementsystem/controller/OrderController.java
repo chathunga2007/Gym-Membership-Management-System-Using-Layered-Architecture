@@ -17,13 +17,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.MemberDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.SupplementDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.MemberDAOImpl;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.SupplementDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.SupplementDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.OrderDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.OrderSupplementDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.tm.OrderSupplementTM;
-import lk.ijse.gymmembershipmanagementsystem.model.MemberModel;
-import lk.ijse.gymmembershipmanagementsystem.model.SupplementModel;
 import lk.ijse.gymmembershipmanagementsystem.model.OrderModel;
 
 public class OrderController implements Initializable {
@@ -61,8 +63,8 @@ public class OrderController implements Initializable {
     @FXML
     private Label lblTotalValue;
 
-    private final MemberModel memberModel = new MemberModel();
-    private final SupplementModel supplementModel = new SupplementModel();
+    private final MemberDAO memberDAO = new MemberDAOImpl();
+    private final SupplementDAO supplementDAO = new SupplementDAOImpl();
     private OrderModel orderModel = new OrderModel();
 
     private final ObservableList<OrderSupplementTM> orderSupplementObList = FXCollections.observableArrayList();
@@ -82,7 +84,7 @@ public class OrderController implements Initializable {
 
     private void loadMemberIds() {
         try {
-            List<MemberDTO> memberList = memberModel.getAllMember();
+            List<MemberDTO> memberList = memberDAO.getAllMember();
             ObservableList<String> obList = FXCollections.observableArrayList();
 
             for (MemberDTO member : memberList) {
@@ -98,7 +100,7 @@ public class OrderController implements Initializable {
 
     private void loadSupplementIds() {
         try {
-            List<SupplementDTO> supplementDTOList = supplementModel.getAllIds();
+            List<SupplementDTO> supplementDTOList = supplementDAO.getAllIds();
             ObservableList<String> obList = FXCollections.observableArrayList();
 
             for (SupplementDTO supplement : supplementDTOList) {
@@ -119,7 +121,7 @@ public class OrderController implements Initializable {
         if (selectedId == null) return;
 
         try {
-            MemberDTO memberDTO = memberModel.search(selectedId);
+            MemberDTO memberDTO = memberDAO.search(selectedId);
             if (memberDTO == null) return;
 
             lblMemberNameValue.setText(memberDTO.getName());
@@ -138,7 +140,7 @@ public class OrderController implements Initializable {
         if (selectedId == null) return;
 
         try {
-            SupplementDTO supplementDTO = supplementModel.search(selectedId);
+            SupplementDTO supplementDTO = supplementDAO.search(selectedId);
             if (supplementDTO == null) return;
 
             lblSupplementNameValue.setText(supplementDTO.getName());

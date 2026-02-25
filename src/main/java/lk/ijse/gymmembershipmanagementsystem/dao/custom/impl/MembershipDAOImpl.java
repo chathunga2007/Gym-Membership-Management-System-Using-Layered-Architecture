@@ -1,20 +1,20 @@
-package lk.ijse.gymmembershipmanagementsystem.model;
+package lk.ijse.gymmembershipmanagementsystem.dao.custom.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.MembershipDAO;
+import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
+import lk.ijse.gymmembershipmanagementsystem.dto.MembershipDTO;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import lk.ijse.gymmembershipmanagementsystem.db.DBConnection;
-import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
-import lk.ijse.gymmembershipmanagementsystem.dto.MembershipDTO;
-import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 
-public class MembershipModel {
+public class MembershipDAOImpl implements MembershipDAO {
+    @Override
     public boolean save(MembershipDTO membershipDTO) throws SQLException {
         boolean result = CrudUtil.execute(
                 "INSERT INTO Membership (memberID, membershipType, issuedDate, expiryDate) VALUES (?,?,?,?)",
@@ -26,6 +26,7 @@ public class MembershipModel {
         return result;
     }
 
+    @Override
     public boolean update(MembershipDTO membershipDTO) throws SQLException {
         boolean result = CrudUtil.execute(
                 "UPDATE Membership SET memberID = ?, membershipType = ?, issuedDate = ?, expiryDate = ? WHERE membershipID = ?",
@@ -38,15 +39,16 @@ public class MembershipModel {
         return result;
     }
 
+    @Override
     public boolean delete(String id) throws SQLException {
         boolean result = CrudUtil.execute("DELETE FROM Membership WHERE membershipID = ?", id);
 
         return result;
     }
 
+    @Override
     public MembershipDTO search(String id) throws SQLException {
-
-        ResultSet  result = CrudUtil.execute("SELECT * FROM Membership WHERE membershipID = ?", id);
+        ResultSet result = CrudUtil.execute("SELECT * FROM Membership WHERE membershipID = ?", id);
 
         if (result.next()) {
             int membershipID = result.getInt("membershipID");
@@ -59,16 +61,13 @@ public class MembershipModel {
         return null;
     }
 
-    public ObservableList<MemberDTO> loadMemberID()throws SQLException{
+    @Override
+    public ObservableList<MemberDTO> loadMemberID() throws SQLException {
+        ResultSet rs = CrudUtil.execute("SELECT memberID, name FROM Member");
+
         ObservableList<MemberDTO> memberDTOS = FXCollections.observableArrayList();
 
-        DBConnection dbc = DBConnection.getInstance();
-        Connection conn = dbc.getConnection();
-
-        String sql = "SELECT memberID , name FROM Member";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        ResultSet rs = pstmt.executeQuery();
-        while(rs.next()){
+        while (rs.next()) {
             memberDTOS.add(new MemberDTO(
                     rs.getInt("memberID"),
                     rs.getString("name")
@@ -77,8 +76,8 @@ public class MembershipModel {
         return memberDTOS;
     }
 
+    @Override
     public List<MembershipDTO> getAllMembership() throws SQLException {
-
         List<MembershipDTO> membershipList = new ArrayList();
 
         ResultSet  result = CrudUtil.execute("SELECT \n" +

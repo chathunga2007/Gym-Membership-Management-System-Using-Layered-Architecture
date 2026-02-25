@@ -11,8 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.SupplementDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.SupplementDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.SupplementDTO;
-import lk.ijse.gymmembershipmanagementsystem.model.SupplementModel;
 
 public class SupplementController implements Initializable {
 
@@ -35,7 +36,7 @@ public class SupplementController implements Initializable {
     @FXML
     private TableColumn unitPriceColumn;
 
-    private SupplementModel supplementModel = new SupplementModel();
+    private SupplementDAO supplementDAO = new SupplementDAOImpl();
 
     private final String ITEM_QTY_REGEX = "^[0-9]{1,}$";
     private final String ITEM_UNIT_PRICE_REGEX = "^[0-9]+(\\.[0-9]{1,2})?$";
@@ -103,7 +104,7 @@ public class SupplementController implements Initializable {
 
             try {
                 SupplementDTO supplementDTO = new SupplementDTO(name, Integer.parseInt(qty), Double.parseDouble(unitPrice));
-                boolean result = supplementModel.save( supplementDTO);
+                boolean result = supplementDAO.save( supplementDTO);
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Supplement Management");
@@ -148,7 +149,7 @@ public class SupplementController implements Initializable {
 
             try {
                 SupplementDTO supplementDTO = new SupplementDTO(Integer.parseInt(id), name, Integer.parseInt(qty), Double.parseDouble(unitPrice));
-                boolean result = supplementModel.update(supplementDTO);
+                boolean result = supplementDAO.update(supplementDTO);
 
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -176,7 +177,7 @@ public class SupplementController implements Initializable {
         String id = idTextField.getText().trim();
 
         try {
-            boolean result = supplementModel.delete( id);
+            boolean result = supplementDAO.delete( id);
 
             if (result) {
                 new Alert(Alert.AlertType.INFORMATION, "Supplement deleted successfully!").show();
@@ -210,7 +211,7 @@ public class SupplementController implements Initializable {
             try {
                 String id = idTextField.getText();
 
-                SupplementDTO supplementDTO = supplementModel.search(id);
+                SupplementDTO supplementDTO = supplementDAO.search(id);
 
                 if(supplementDTO!=null) {
                     nameCombo.setValue(supplementDTO.getName());
@@ -231,7 +232,7 @@ public class SupplementController implements Initializable {
     public void loadSupplementTable() {
         try {
 
-            List<SupplementDTO> supplementDTOList = supplementModel.getAllIds();
+            List<SupplementDTO> supplementDTOList = supplementDAO.getAllIds();
 
             ObservableList<SupplementDTO> obList = FXCollections.observableArrayList();
 

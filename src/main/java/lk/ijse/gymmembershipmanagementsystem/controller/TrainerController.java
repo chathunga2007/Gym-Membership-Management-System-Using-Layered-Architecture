@@ -15,8 +15,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.TrainerDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.TrainerDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.TrainerDTO;
-import lk.ijse.gymmembershipmanagementsystem.model.TrainerModel;
 
 public class TrainerController implements Initializable {
     
@@ -53,7 +54,7 @@ public class TrainerController implements Initializable {
     private final String NIC_REGEX = "^([0-9]{9}[VvXx]|[0-9]{12})$";
     private final String CONTACT_REGEX = "^0[0-9]{9}$";
     
-    private final TrainerModel trainerModel = new TrainerModel();
+    private final TrainerDAO trainerDAO = new TrainerDAOImpl();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -113,7 +114,7 @@ public class TrainerController implements Initializable {
             
             try {
             TrainerDTO trainerDTO = new TrainerDTO(name, Integer.parseInt(age), nic, contact, email);
-            boolean result = trainerModel.save(trainerDTO);
+            boolean result = trainerDAO.save(trainerDTO);
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Trainer Management");
@@ -176,7 +177,7 @@ public class TrainerController implements Initializable {
 
             try {
                 TrainerDTO trainerDTO = new TrainerDTO(Integer.parseInt(id), name, Integer.parseInt(age), nic, contact, email);
-                boolean result = trainerModel.update(trainerDTO);
+                boolean result = trainerDAO.update(trainerDTO);
 
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -204,7 +205,7 @@ public class TrainerController implements Initializable {
         String id = idField.getText().trim();
 
         try {
-            boolean result = trainerModel.delete( id);
+            boolean result = trainerDAO.delete( id);
 
             if (result) {
                 new Alert(Alert.AlertType.INFORMATION, "Trainer deleted successfully!").show();
@@ -226,7 +227,7 @@ public class TrainerController implements Initializable {
             try {
                 String id = idField.getText();
                 
-                TrainerDTO trainerDTO = trainerModel.search(id);
+                TrainerDTO trainerDTO = trainerDAO.search(id);
                 
                 if(trainerDTO!=null) {
                     nameField.setText(trainerDTO.getName());
@@ -263,7 +264,7 @@ public class TrainerController implements Initializable {
     public void loadTrainerTable() {
         try {
             
-            List<TrainerDTO> trainerList = trainerModel.getAllTrainer();
+            List<TrainerDTO> trainerList = trainerDAO.getAllTrainer();
             
             ObservableList<TrainerDTO> obList = FXCollections.observableArrayList();
             

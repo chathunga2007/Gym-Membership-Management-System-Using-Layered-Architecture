@@ -1,5 +1,7 @@
 package lk.ijse.gymmembershipmanagementsystem.model;
 
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.OrderSupplementDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.OrderSupplementDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.db.DBConnection;
 import lk.ijse.gymmembershipmanagementsystem.dto.OrderDTO;
 import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
@@ -15,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OrderModel {
-    private OrderSupplementModel orderSupplementModel = new OrderSupplementModel();
+    private OrderSupplementDAO orderSupplementDAO = new OrderSupplementDAOImpl();
 
     public boolean placeOrder(OrderDTO orderDTO) throws Exception {
 
@@ -35,7 +37,7 @@ public class OrderModel {
                 if (rs.next()) {
                     int latestOrderId = rs.getInt("id");
 
-                    orderSupplementModel.saveOrderSupplement(latestOrderId, orderDTO.getOrderSupplements());
+                    orderSupplementDAO.saveOrderSupplement(latestOrderId, orderDTO.getOrderSupplements());
                     printOrderInvoice(latestOrderId);
 
                 } else {
@@ -70,6 +72,5 @@ public class OrderModel {
         JasperPrint  jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
 
         JasperViewer.viewReport(jasperPrint, false);
-
     }
 }

@@ -13,9 +13,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.MembershipDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.MembershipDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.MembershipDTO;
-import lk.ijse.gymmembershipmanagementsystem.model.MembershipModel;
 
 public class MembershipController implements Initializable {
     
@@ -42,7 +43,7 @@ public class MembershipController implements Initializable {
     @FXML
     private TableColumn memberNameColumn;
     
-    private final MembershipModel membershipModel = new MembershipModel();
+    private final MembershipDAO membershipDAO = new MembershipDAOImpl();
 
     private int selectedMemberId;
     
@@ -83,7 +84,7 @@ public class MembershipController implements Initializable {
         LocalDate expiryDate = expiryDateField.getValue();
         try{
             MembershipDTO membershipDTO = new MembershipDTO(Integer.parseInt(String.valueOf(selectedMemberId)), membershipType, issuedDate, expiryDate);
-            boolean result = membershipModel.save(membershipDTO);
+            boolean result = membershipDAO.save(membershipDTO);
             if (result) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Membership Management");
@@ -114,7 +115,7 @@ public class MembershipController implements Initializable {
         LocalDate expiryDate = expiryDateField.getValue();
         try {
             MembershipDTO membershipDTO = new MembershipDTO(Integer.parseInt(id), selectedMemberId, membershipType, issuedDate, expiryDate);
-            boolean result = membershipModel.update(membershipDTO);
+            boolean result = membershipDAO.update(membershipDTO);
             if (result) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Membership Update");
@@ -140,7 +141,7 @@ public class MembershipController implements Initializable {
         String id = idField.getText().trim();
 
         try {
-            boolean result = membershipModel.delete( id);
+            boolean result = membershipDAO.delete( id);
             if (result) {
                 new Alert(Alert.AlertType.INFORMATION, "Membership deleted successfully!").show();
                 cleanFileds();
@@ -161,7 +162,7 @@ public class MembershipController implements Initializable {
             try {
                 String id = idField.getText();
 
-                MembershipDTO membershipDTO = membershipModel.search(id);
+                MembershipDTO membershipDTO = membershipDAO.search(id);
 
                 if(membershipDTO!=null) {
                     membershipTypeComboBox.setValue(membershipDTO.getMembershipType());
@@ -186,7 +187,7 @@ public class MembershipController implements Initializable {
 
     private void loadMemberID(){
         try {
-            ObservableList<MemberDTO> idList = membershipModel.loadMemberID();
+            ObservableList<MemberDTO> idList = membershipDAO.loadMemberID();
             cmbMemberId.setItems(idList);
             cmbMemberId.setCellFactory(cb -> new ListCell<MemberDTO>() {
                 @Override
@@ -234,7 +235,7 @@ public class MembershipController implements Initializable {
     public void loadMembershipTable() {
         try {
 
-            List<MembershipDTO> membershipList = membershipModel.getAllMembership();
+            List<MembershipDTO> membershipList = membershipDAO.getAllMembership();
 
             ObservableList<MembershipDTO> obList = FXCollections.observableArrayList();
 
