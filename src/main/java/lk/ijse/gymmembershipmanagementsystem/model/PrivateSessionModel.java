@@ -1,22 +1,14 @@
 package lk.ijse.gymmembershipmanagementsystem.model;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.PaymentDAO;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.PrivateSessionDAO;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.PaymentDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.PrivateSessionDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.db.DBConnection;
-import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.PaymentDTO;
 import lk.ijse.gymmembershipmanagementsystem.dto.PrivateSessionDTO;
-import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PrivateSessionModel {
 
