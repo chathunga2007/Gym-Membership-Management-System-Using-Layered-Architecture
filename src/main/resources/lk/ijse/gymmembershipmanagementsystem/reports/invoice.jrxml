@@ -65,12 +65,12 @@ FROM order_items oi JOIN supplement s ON oi.supplement_id = s.id WHERE oi.order_
 	<background splitType="Stretch"/>
 	<title height="141" splitType="Stretch">
 		<element kind="image" uuid="7118677d-93a0-4353-8e2c-693b996ea98f" x="161" y="-10" width="233" height="70">
-			<expression><![CDATA["D:/GymMembershipManagementSystem/src/main/resources/lk/ijse/gymmembershipmanagementsystem/images/images.png"]]></expression>
+			<expression><![CDATA["/home/chathunga-bimsara/Documents/Gym Membership Management System Using Layered Architecture/src/main/resources/lk/ijse/gymmembershipmanagementsystem/images/images.png"]]></expression>
 		</element>
-		<element kind="staticText" uuid="46e0579c-3ffa-466d-a9c6-638e5a03dd10" x="188" y="60" width="179" height="48" forecolor="#ED0905" fontName="Times New Roman" fontSize="40.0" bold="true">
+		<element kind="staticText" uuid="46e0579c-3ffa-466d-a9c6-638e5a03dd10" x="188" y="60" width="179" height="48" forecolor="#ED0905" fontName="Liberation Serif" fontSize="40.0" bold="true">
 			<text><![CDATA[INVOICE]]></text>
 		</element>
-		<element kind="staticText" uuid="5fe37d3d-0a3e-4e2e-a444-0dcf8f6fd762" x="210" y="100" width="135" height="30" forecolor="#1225FC" fontName="Comic Sans MS" fontSize="20.0">
+		<element kind="staticText" uuid="5fe37d3d-0a3e-4e2e-a444-0dcf8f6fd762" x="210" y="100" width="135" height="30" forecolor="#1225FC" fontName="Liberation Serif" fontSize="20.0">
 			<text><![CDATA[Fitness is life]]></text>
 		</element>
 	</title>
@@ -131,7 +131,7 @@ FROM order_items oi JOIN supplement s ON oi.supplement_id = s.id WHERE oi.order_
 		</band>
 	</detail>
 	<columnFooter height="45" splitType="Stretch">
-		<element kind="staticText" uuid="78d4abb4-81f9-4340-a18e-8b9c50f148e9" x="227" y="7" width="100" height="30" fontName="Times New Roman" fontSize="16.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+		<element kind="staticText" uuid="78d4abb4-81f9-4340-a18e-8b9c50f148e9" x="227" y="7" width="100" height="30" fontName="Liberation Serif" fontSize="16.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Thank You ...]]></text>
 		</element>
 	</columnFooter>

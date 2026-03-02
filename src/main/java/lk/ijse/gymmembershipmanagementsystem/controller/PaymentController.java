@@ -280,7 +280,7 @@ public class PaymentController implements Initializable {
     public void printPaymentBill() throws Exception {
         Connection conn = DBConnection.getInstance().getConnection();
 
-        InputStream reportObject = getClass().getResourceAsStream("/lk/ijse/GymMembershipManagementSystem/reports/payment_bill.jrxml");
+        InputStream reportObject = getClass().getResourceAsStream("/lk/ijse/gymmembershipmanagementsystem/reports/payment_bill.jrxml");
 
         JasperReport jasperReport = JasperCompileManager.compileReport(reportObject);
 

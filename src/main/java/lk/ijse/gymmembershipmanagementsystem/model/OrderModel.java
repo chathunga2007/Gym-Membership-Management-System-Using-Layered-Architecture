@@ -62,7 +62,7 @@ public class OrderModel {
     public void printOrderInvoice(int orderId) throws Exception {
         Connection conn = DBConnection.getInstance().getConnection();
 
-        InputStream reportObject = getClass().getResourceAsStream("/lk/ijse/GymMembershipManagementSystem/reports/invoice.jrxml");
+        InputStream reportObject = getClass().getResourceAsStream("/lk/ijse/gymmembershipmanagementsystem/reports/invoice.jrxml");
 
         JasperReport jasperReport = JasperCompileManager.compileReport(reportObject);
 
