@@ -74,4 +74,35 @@ public class EquipmentDAOImpl implements EquipmentDAO {
 
         return equipmentList;
     }
+
+    @Override
+    public int getQty(int equipmentID) throws SQLException {
+
+        ResultSet rs = CrudUtil.execute(
+                "SELECT qty FROM Equipments WHERE equipmentsID = ?",
+                equipmentID
+        );
+
+        if (rs.next()) return rs.getInt("qty");
+
+        return 0;
+    }
+
+    @Override
+    public boolean reduceQty(int equipmentID) throws SQLException {
+
+        return CrudUtil.execute(
+                "UPDATE Equipments SET qty = qty - 1 WHERE equipmentsID = ?",
+                equipmentID
+        );
+    }
+
+    @Override
+    public boolean increaseQty(int equipmentID) throws SQLException {
+
+        return CrudUtil.execute(
+                "UPDATE Equipments SET qty = qty + 1 WHERE equipmentsID = ?",
+                equipmentID
+        );
+    }
 }

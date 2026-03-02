@@ -11,4 +11,7 @@ public interface EquipmentDAO {
     public boolean delete(String id) throws SQLException;
     public EquipmentDTO search(String id) throws SQLException;
     public List<EquipmentDTO> getAllEquipment() throws SQLException;
+    int getQty(int equipmentID) throws SQLException;
+    boolean reduceQty(int equipmentID) throws SQLException;
+    boolean increaseQty(int equipmentID) throws SQLException;
 }

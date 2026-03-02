@@ -1,17 +1,18 @@
 package lk.ijse.gymmembershipmanagementsystem.controller;
 
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.PasswordResetDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.UserDAO;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.PasswordResetDAOImpl;
-import lk.ijse.gymmembershipmanagementsystem.model.UserModel;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.UserDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.util.EmailUtil;
 import lk.ijse.gymmembershipmanagementsystem.util.OTPUtil;
 
 public class PasswordResetController {
-    private final UserModel user = new UserModel();
+    private final UserDAO userDAO = new UserDAOImpl();
     private final PasswordResetDAO otpModel = new PasswordResetDAOImpl();
 
     public void sendOTP(String email) throws Exception {
-        if (!user.emailExists(email))
+        if (!userDAO.emailExists(email))
             throw new RuntimeException("Email not found!");
 
         String otp = OTPUtil.generate();
@@ -24,7 +25,7 @@ public class PasswordResetController {
     }
 
     public void resetPassword(String email, String password) throws Exception {
-        user.updatePassword(email, password);
+        userDAO.updatePassword(email, password);
         otpModel.clearOTP(email);
     }
 }

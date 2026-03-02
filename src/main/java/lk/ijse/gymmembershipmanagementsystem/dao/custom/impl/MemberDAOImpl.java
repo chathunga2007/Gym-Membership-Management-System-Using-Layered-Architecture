@@ -2,8 +2,7 @@ package lk.ijse.gymmembershipmanagementsystem.dao.custom.impl;
 
 import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.MemberDAO;
-import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
-
+import lk.ijse.gymmembershipmanagementsystem.entity.Member;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -12,36 +11,33 @@ import java.util.List;
 
 public class MemberDAOImpl implements MemberDAO {
     @Override
-    public boolean save(MemberDTO memDTO) throws SQLException {
-        boolean result = CrudUtil.execute(
+    public boolean save(Member entity) throws SQLException {
+        return CrudUtil.execute(
                 "INSERT INTO Member (name, dob, age, email, nic, contact, joinedDate, status) VALUES (?,?, ?, ?, ? ,? ,?, ?)",
-                memDTO.getName(),
-                memDTO.getDob(),
-                memDTO.getAge(),
-                memDTO.getEmail(),
-                memDTO.getNic(),
-                memDTO.getContact(),
-                memDTO.getJoinedDate(),
-                memDTO.getStatus()
+                entity.getName(),
+                entity.getDob(),
+                entity.getAge(),
+                entity.getEmail(),
+                entity.getNic(),
+                entity.getContact(),
+                entity.getJoinedDate(),
+                entity.getStatus()
         );
-        return result;
     }
 
     @Override
-    public boolean update(MemberDTO memDTO) throws SQLException {
-        boolean result = CrudUtil.execute("UPDATE Member SET name = ?, dob = ?, age = ?, email =?, nic = ?, contact = ?, joinedDate = ?, status = ? WHERE MemberID = ?",
-                memDTO.getName(),
-                memDTO.getDob(),
-                memDTO.getAge(),
-                memDTO.getEmail(),
-                memDTO.getNic(),
-                memDTO.getContact(),
-                memDTO.getJoinedDate(),
-                memDTO.getStatus(),
-                memDTO.getMemberID()
+    public boolean update(Member entity) throws SQLException {
+        return CrudUtil.execute("UPDATE Member SET name = ?, dob = ?, age = ?, email =?, nic = ?, contact = ?, joinedDate = ?, status = ? WHERE MemberID = ?",
+                entity.getName(),
+                entity.getDob(),
+                entity.getAge(),
+                entity.getEmail(),
+                entity.getNic(),
+                entity.getContact(),
+                entity.getJoinedDate(),
+                entity.getStatus(),
+                entity.getMemberID()
         );
-
-        return result;
     }
 
     @Override
@@ -52,7 +48,7 @@ public class MemberDAOImpl implements MemberDAO {
     }
 
     @Override
-    public MemberDTO search(String id) throws SQLException {
+    public Member search(String id) throws SQLException {
         ResultSet result = CrudUtil.execute("SELECT * FROM Member WHERE memberID = ?", id);
 
         if (result.next()) {
@@ -65,14 +61,14 @@ public class MemberDAOImpl implements MemberDAO {
             String contact = result.getString("contact");
             LocalDate joinedDate = LocalDate.parse(result.getString("joinedDate"));
             String status = result.getString("status");
-            return new MemberDTO(memID, name, dob, age, email, nic, contact, joinedDate, status);
+            return new Member(memID, name, dob, age, email, nic, contact, joinedDate, status);
         }
         return null;
     }
 
     @Override
-    public List<MemberDTO> getAllMember() throws SQLException {
-        List<MemberDTO> memberList = new ArrayList();
+    public List<Member> getAll() throws SQLException {
+        List<Member> memberList = new ArrayList();
 
         ResultSet  result = CrudUtil.execute("SELECT * FROM Member ORDER BY memberID DESC");
 
@@ -87,9 +83,9 @@ public class MemberDAOImpl implements MemberDAO {
             LocalDate joinedDate = LocalDate.parse(result.getString("joinedDate"));
             String status = result.getString("status");
 
-            MemberDTO memberDTO = new MemberDTO(memID, name, dob, age, email, nic, contact, joinedDate, status);
+            Member member = new Member(memID, name, dob, age, email, nic, contact, joinedDate, status);
 
-            memberList.add(memberDTO);
+            memberList.add(member);
         }
         return memberList;
     }

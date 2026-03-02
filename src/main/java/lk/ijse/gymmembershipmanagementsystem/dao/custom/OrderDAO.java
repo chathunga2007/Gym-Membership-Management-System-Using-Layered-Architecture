@@ -4,4 +4,5 @@ import lk.ijse.gymmembershipmanagementsystem.dto.OrderDTO;
 
 public interface OrderDAO {
     public boolean saveOrder(OrderDTO orderDTO) throws Exception;
+    public int getLatestOrderId() throws Exception;
 }

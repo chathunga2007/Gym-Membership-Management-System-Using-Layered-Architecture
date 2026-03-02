@@ -13,6 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import lk.ijse.gymmembershipmanagementsystem.bo.BOFactory;
+import lk.ijse.gymmembershipmanagementsystem.bo.custom.MemberBO;
+import lk.ijse.gymmembershipmanagementsystem.bo.custom.impl.MemberBOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.MemberDAO;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.MemberDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.MemberDTO;
@@ -63,7 +66,7 @@ public class MemberController implements Initializable {
     private final String NIC_REGEX = "^([0-9]{9}[VvXx]|[0-9]{12})$";
     private final String CONTACT_REGEX = "^0[0-9]{9}$";
     
-    private final MemberDAO memberDAO = new MemberDAOImpl();
+    private final MemberBO memberBO = (MemberBO) BOFactory.getInstance().getBO(BOFactory.BOType.MEMBER);
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -130,7 +133,7 @@ public class MemberController implements Initializable {
         } else {
             try {
             MemberDTO memDTO = new MemberDTO(name, dob, Integer.parseInt(age), email, nic, contact, joinedDate, status);
-            boolean result = memberDAO.save(memDTO);
+            boolean result = memberBO.saveMember(memDTO);
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Member Management");
@@ -196,7 +199,7 @@ public class MemberController implements Initializable {
 
             try {
                 MemberDTO memDTO = new MemberDTO(Integer.parseInt(id), name, dob, Integer.parseInt(age), email, nic, contact, joinedDate, status);
-                boolean result = memberDAO.update(memDTO);
+                boolean result = memberBO.updateMember(memDTO);
 
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -224,7 +227,7 @@ public class MemberController implements Initializable {
         String id = idField.getText().trim();
 
         try {
-            boolean result = memberDAO.delete(id);
+            boolean result = memberBO.deleteMember(id);
 
             if (result) {
                 new Alert(Alert.AlertType.INFORMATION, "Member deleted successfully!").show();
@@ -246,7 +249,7 @@ public class MemberController implements Initializable {
             try {
                 String id = idField.getText();
                 
-                MemberDTO memDTO = memberDAO.search(id);
+                MemberDTO memDTO = memberBO.searchMember(id);
                 
                 if(memDTO!=null) {
                     nameField.setText(memDTO.getName());
@@ -288,7 +291,7 @@ public class MemberController implements Initializable {
     public void loadMemberTable() {
         try {
             
-            List<MemberDTO> memberList = memberDAO.getAllMember();
+            List<MemberDTO> memberList = memberBO.getAllMember();
             
             ObservableList<MemberDTO> obList = FXCollections.observableArrayList();
             

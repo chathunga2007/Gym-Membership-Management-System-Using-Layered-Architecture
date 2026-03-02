@@ -14,12 +14,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.EquipmentDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.SessionDAO;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.EquipmentDAOImpl;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.SessionDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dto.*;
 import lk.ijse.gymmembershipmanagementsystem.model.SessionModel;
 
 public class SessionController implements Initializable {
-    
+
     @FXML
     private TextField sessionIDField;
     @FXML
@@ -44,11 +46,11 @@ public class SessionController implements Initializable {
     private TableColumn slotDateColumn;
     @FXML
     private ListView<EquipmentDTO> equipmentListView;
-    
-    SessionModel sessionModel = new SessionModel();
+
+    SessionDAO sessionDAO = new SessionDAOImpl();
 
     private final String DURATION_REGEX = "^[1-9][0-9]{0,3}$";
-    
+
     private int selectTrainerID;
     private int selectSlotID;
 
@@ -89,7 +91,7 @@ public class SessionController implements Initializable {
         trainerNameColumn.setCellValueFactory(new PropertyValueFactory<>("trainerName"));
         slotDateColumn.setCellValueFactory(new PropertyValueFactory<>("slotDate"));
         loadSessionTable();
-        
+
         trainerIDComboBox.getSelectionModel().selectedItemProperty().addListener((obs, old, newVal) -> {
             if (newVal != null) {
                 selectTrainerID = newVal.getTrainerId();
@@ -111,13 +113,13 @@ public class SessionController implements Initializable {
                     }
                 }
         );
-    }    
-    
+    }
+
     @FXML
     private void save() {
         String sessionType = sessionTypeCombo.getValue();
         String duration = durationField.getText().trim();
-        
+
         if(!duration.matches(DURATION_REGEX)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Session Management");
@@ -138,7 +140,7 @@ public class SessionController implements Initializable {
 
                 SessionDTO sessionDTO = new SessionDTO(selectSlotID, selectTrainerID, sessionType, Integer.parseInt(duration));
                 boolean result = sessionModel.save(sessionDTO, equipmentIDs);
-                
+
                 if (result) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Session Management");
@@ -258,7 +260,7 @@ public class SessionController implements Initializable {
         slotIDComboBox.setValue(null);
         equipmentListView.getSelectionModel().clearSelection();
     }
-    
+
     private void loadTrainerID(){
         try {
             ObservableList<TrainerDTO> idList = sessionModel.loadTrainerID();
@@ -289,7 +291,7 @@ public class SessionController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     private void loadSlotID(){
         try {
             ObservableList<TimeSlotDTO> idList = sessionModel.loadSlotID();

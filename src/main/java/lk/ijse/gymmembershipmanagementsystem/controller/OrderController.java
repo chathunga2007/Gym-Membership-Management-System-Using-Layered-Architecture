@@ -17,6 +17,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lk.ijse.gymmembershipmanagementsystem.bo.BOFactory;
+import lk.ijse.gymmembershipmanagementsystem.bo.custom.MemberBO;
+import lk.ijse.gymmembershipmanagementsystem.bo.custom.impl.MemberBOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.MemberDAO;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.SupplementDAO;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.MemberDAOImpl;
@@ -63,7 +66,7 @@ public class OrderController implements Initializable {
     @FXML
     private Label lblTotalValue;
 
-    private final MemberDAO memberDAO = new MemberDAOImpl();
+    private final MemberBO memberBO = (MemberBO) BOFactory.getInstance().getBO(BOFactory.BOType.MEMBER);
     private final SupplementDAO supplementDAO = new SupplementDAOImpl();
     private OrderModel orderModel = new OrderModel();
 
@@ -84,7 +87,7 @@ public class OrderController implements Initializable {
 
     private void loadMemberIds() {
         try {
-            List<MemberDTO> memberList = memberDAO.getAllMember();
+            List<MemberDTO> memberList = memberBO.getAllMember();
             ObservableList<String> obList = FXCollections.observableArrayList();
 
             for (MemberDTO member : memberList) {
@@ -121,7 +124,7 @@ public class OrderController implements Initializable {
         if (selectedId == null) return;
 
         try {
-            MemberDTO memberDTO = memberDAO.search(selectedId);
+            MemberDTO memberDTO = memberBO.searchMember(selectedId);
             if (memberDTO == null) return;
 
             lblMemberNameValue.setText(memberDTO.getName());

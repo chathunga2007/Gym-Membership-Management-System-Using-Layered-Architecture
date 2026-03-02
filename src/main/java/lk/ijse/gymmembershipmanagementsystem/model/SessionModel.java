@@ -9,11 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.EquipmentDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.SessionDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.SessionEquipmentDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.TimeSlotDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.EquipmentDAOImpl;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.SessionDAOImpl;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.SessionEquipmentDAOImpl;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.TimeSlotDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.db.DBConnection;
 import lk.ijse.gymmembershipmanagementsystem.dto.*;
 import lk.ijse.gymmembershipmanagementsystem.dao.CrudUtil;
 
 public class SessionModel {
+
+    SessionDAO  sessionDAO = new SessionDAOImpl();
+    EquipmentDAO equipmentDAO = new EquipmentDAOImpl();
+    SessionEquipmentDAO  sessionEquipmentDAO = new SessionEquipmentDAOImpl();
 
     public boolean save(SessionDTO sessionDTO, List<Integer> equipmentIDs) throws SQLException {
 
@@ -21,53 +33,33 @@ public class SessionModel {
         con.setAutoCommit(false);
 
         try {
-            boolean sessionSaved = CrudUtil.execute(
-                    "INSERT INTO Session (trainerID, slotID, sessionType, duration) VALUES (?, ?, ?, ?)",
-                    sessionDTO.getTrainerId(),
-                    sessionDTO.getSlotId(),
-                    sessionDTO.getSessionType(),
-                    sessionDTO.getDuration()
-            );
+            boolean sessionSaved = sessionDAO.save(sessionDTO);
 
             if (!sessionSaved) {
                 con.rollback();
                 return false;
             }
 
-            ResultSet rs = CrudUtil.execute("SELECT LAST_INSERT_ID()");
-            rs.next();
-            int sessionID = rs.getInt(1);
+            int sessionID = sessionDAO.getLastSessionId();
 
             if (equipmentIDs != null && !equipmentIDs.isEmpty()) {
                 for (Integer eqID : equipmentIDs) {
 
-                    ResultSet qtyRs = CrudUtil.execute(
-                            "SELECT qty FROM Equipments WHERE equipmentsID = ?",
-                            eqID
-                    );
-                    qtyRs.next();
-                    int qty = qtyRs.getInt("qty");
+                    int qty = equipmentDAO.getQty(eqID);
 
                     if (qty <= 0) {
                         con.rollback();
                         throw new RuntimeException("Equipment out of stock!");
                     }
 
-                    boolean eqSaved = CrudUtil.execute(
-                            "INSERT INTO Session_Equipments (sessionID, equipmentsID) VALUES (?, ?)",
-                            sessionID,
-                            eqID
-                    );
+                    boolean eqSaved = sessionEquipmentDAO.save(sessionID, eqID);
 
                     if (!eqSaved) {
                         con.rollback();
                         return false;
                     }
 
-                    boolean qtyUpdated = CrudUtil.execute(
-                            "UPDATE Equipments SET qty = qty - 1 WHERE equipmentsID = ?",
-                            eqID
-                    );
+                    boolean qtyUpdated = equipmentDAO.reduceQty(eqID);
 
                     if (!qtyUpdated) {
                         con.rollback();
@@ -88,18 +80,18 @@ public class SessionModel {
     }
 
 
-    public boolean update(SessionDTO sessionDTO) throws SQLException {
-
-        boolean result = CrudUtil.execute("UPDATE Session SET sessionType = ?, duration = ?, trainerID = ?, slotID =? WHERE sessionID = ?",
-                sessionDTO.getSessionType(),
-                sessionDTO.getDuration(),
-                sessionDTO.getTrainerId(),
-                sessionDTO.getSlotId(),
-                sessionDTO.getSessionId()
-        );
-
-        return result;
-    }
+//    public boolean update(SessionDTO sessionDTO) throws SQLException {
+//
+//        boolean result = CrudUtil.execute("UPDATE Session SET sessionType = ?, duration = ?, trainerID = ?, slotID =? WHERE sessionID = ?",
+//                sessionDTO.getSessionType(),
+//                sessionDTO.getDuration(),
+//                sessionDTO.getTrainerId(),
+//                sessionDTO.getSlotId(),
+//                sessionDTO.getSessionId()
+//        );
+//
+//        return result;
+//    }
 
     public boolean delete(String id) throws SQLException {
 
@@ -107,32 +99,15 @@ public class SessionModel {
         con.setAutoCommit(false);
 
         try {
-            ResultSet rs = CrudUtil.execute(
-                    "SELECT equipmentsID FROM Session_Equipments WHERE sessionID = ?",
-                    id
-            );
+            List<Integer> equipmentIDs = sessionEquipmentDAO.getEquipmentIDs(id);
 
-            List<Integer> equipmentIDs = new ArrayList<>();
-            while (rs.next()) {
-                equipmentIDs.add(rs.getInt("equipmentsID"));
-            }
-
-            CrudUtil.execute(
-                    "DELETE FROM Session_Equipments WHERE sessionID = ?",
-                    id
-            );
+            sessionEquipmentDAO.deleteBySessionID(id);
 
             for (Integer eqID : equipmentIDs) {
-                CrudUtil.execute(
-                        "UPDATE Equipments SET qty = qty + 1 WHERE equipmentsID = ?",
-                        eqID
-                );
+                equipmentDAO.increaseQty(eqID);
             }
 
-            boolean result = CrudUtil.execute(
-                    "DELETE FROM Session WHERE sessionID = ?",
-                    id
-            );
+            boolean result = sessionDAO.delete(id);
 
             if (!result) {
                 con.rollback();
@@ -151,87 +126,82 @@ public class SessionModel {
     }
 
 
-    public SessionDTO search(String id) throws SQLException {
-
-        ResultSet  result = CrudUtil.execute("SELECT * FROM Session WHERE sessionID = ?", id);
-
-        if (result.next()) {
-            int sessionID = result.getInt("sessionID");
-            String sessionType = result.getString("sessionType");
-            int duration = result.getInt("duration");
-            int trainerID = result.getInt("trainerID");
-            int slotID = result.getInt("slotID");
-            return new SessionDTO(sessionID, slotID, trainerID, sessionType, duration);
-        }
-        return null;
-    }
+//    public SessionDTO search(String id) throws SQLException {
+//
+//        ResultSet  result = CrudUtil.execute("SELECT * FROM Session WHERE sessionID = ?", id);
+//
+//        if (result.next()) {
+//            int sessionID = result.getInt("sessionID");
+//            String sessionType = result.getString("sessionType");
+//            int duration = result.getInt("duration");
+//            int trainerID = result.getInt("trainerID");
+//            int slotID = result.getInt("slotID");
+//            return new SessionDTO(sessionID, slotID, trainerID, sessionType, duration);
+//        }
+//        return null;
+//    }
     
-    public ObservableList<TrainerDTO> loadTrainerID()throws SQLException{
-        ObservableList<TrainerDTO> trainerDTO = FXCollections.observableArrayList();
-
-        DBConnection dbc = DBConnection.getInstance();
-        Connection conn = dbc.getConnection();
-
-        String sql = "SELECT trainerID, name FROM Trainer";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        ResultSet rs = pstmt.executeQuery();
-        while(rs.next()){
-            trainerDTO.add(new TrainerDTO(
-                    rs.getInt("trainerID"),
-                    rs.getString("name")
-            ));
-        }
-        return trainerDTO;
-    }
-    
-    public ObservableList<TimeSlotDTO> loadSlotID()throws SQLException{
-        ObservableList<TimeSlotDTO> timeSlotDTO = FXCollections.observableArrayList();
-
-        DBConnection dbc = DBConnection.getInstance();
-        Connection conn = dbc.getConnection();
-
-        String sql = "SELECT slotID, date FROM Time_Slot";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        ResultSet rs = pstmt.executeQuery();
-        while(rs.next()){
-            timeSlotDTO.add(new TimeSlotDTO(
-                    rs.getInt("slotID"),
-                    rs.getDate("date").toLocalDate()
-            ));
-        }
-        return timeSlotDTO;
-    }
-
-    public List<SessionDTO> getAllSession() throws SQLException {
-
-        List<SessionDTO> sessionList = new ArrayList();
-
-        ResultSet  result = CrudUtil.execute("SELECT \n" +
-                "            s.sessionID,\n" +
-                "            s.sessionType,\n" +
-                "            s.duration,\n" +
-                "            t.trainerID,\n" +
-                "            t.name AS trainerName,\n" +
-                "            ts.slotID,\n" +
-                "            ts.date\n" +
-                "        FROM Session s\n" +
-                "        JOIN Trainer t ON s.trainerID = t.trainerID\n" +
-                "        JOIN Time_Slot ts ON s.slotID = ts.slotID\n" +
-                "        ORDER BY s.sessionID DESC");
-
-        while(result.next()) {
-            int sessionID = result.getInt("sessionID");
-            int  slotID = result.getInt("slotID");
-            int trainerID = result.getInt("trainerID");
-            String sessionType = result.getString("sessionType");
-            int duration = result.getInt("duration");
-            String trainerName = result.getString("trainerName");
-            LocalDate date = result.getDate("date").toLocalDate();
-
-            SessionDTO sessionDTO = new SessionDTO(sessionID, sessionType,duration, trainerID, trainerName, slotID, date);
-
-            sessionList.add(sessionDTO);
-        }
-        return sessionList;
-    }
+//    public ObservableList<TrainerDTO> loadTrainerID()throws SQLException{
+//        ObservableList<TrainerDTO> trainerList = FXCollections.observableArrayList();
+//
+//        ResultSet rs = CrudUtil.execute("SELECT trainerID, name FROM Trainer");
+//
+//        while (rs.next()) {
+//            trainerList.add(new TrainerDTO(
+//                    rs.getInt("trainerID"),
+//                    rs.getString("name")
+//            ));
+//        }
+//
+//        return trainerList;
+//    }
+//
+//    public ObservableList<TimeSlotDTO> loadSlotID()throws SQLException{
+//
+//        ObservableList<TimeSlotDTO> timeSlotList = FXCollections.observableArrayList();
+//
+//        ResultSet rs = CrudUtil.execute("SELECT slotID, date FROM Time_Slot");
+//
+//        while (rs.next()) {
+//            timeSlotList.add(new TimeSlotDTO(
+//                    rs.getInt("slotID"),
+//                    rs.getDate("date").toLocalDate()
+//            ));
+//        }
+//
+//        return timeSlotList;
+//    }
+//
+//    public List<SessionDTO> getAllSession() throws SQLException {
+//
+//        List<SessionDTO> sessionList = new ArrayList();
+//
+//        ResultSet  result = CrudUtil.execute("SELECT \n" +
+//                "            s.sessionID,\n" +
+//                "            s.sessionType,\n" +
+//                "            s.duration,\n" +
+//                "            t.trainerID,\n" +
+//                "            t.name AS trainerName,\n" +
+//                "            ts.slotID,\n" +
+//                "            ts.date\n" +
+//                "        FROM Session s\n" +
+//                "        JOIN Trainer t ON s.trainerID = t.trainerID\n" +
+//                "        JOIN Time_Slot ts ON s.slotID = ts.slotID\n" +
+//                "        ORDER BY s.sessionID DESC");
+//
+//        while(result.next()) {
+//            int sessionID = result.getInt("sessionID");
+//            int  slotID = result.getInt("slotID");
+//            int trainerID = result.getInt("trainerID");
+//            String sessionType = result.getString("sessionType");
+//            int duration = result.getInt("duration");
+//            String trainerName = result.getString("trainerName");
+//            LocalDate date = result.getDate("date").toLocalDate();
+//
+//            SessionDTO sessionDTO = new SessionDTO(sessionID, sessionType,duration, trainerID, trainerName, slotID, date);
+//
+//            sessionList.add(sessionDTO);
+//        }
+//        return sessionList;
+//    }
 }

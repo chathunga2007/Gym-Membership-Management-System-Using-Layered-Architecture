@@ -6,7 +6,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import lk.ijse.gymmembershipmanagementsystem.App;
-import lk.ijse.gymmembershipmanagementsystem.model.UserModel;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.UserDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.UserDAOImpl;
 
 public class LoginController {
     @FXML
@@ -14,7 +15,7 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    private final UserModel user = new UserModel();
+    UserDAO userDAO = new UserDAOImpl();
     
     @FXML
     private void back() throws IOException {
@@ -27,7 +28,7 @@ public class LoginController {
             String uName = userNameField.getText();
             String pWord = passwordField.getText();
 
-            if (user.checkLogin(uName, pWord)) {
+            if (userDAO.checkLogin(uName, pWord)) {
                 System.out.println("Logged-in Successfully!");
                 App.setRoot("DashBoard", 1300,790);
             } else {

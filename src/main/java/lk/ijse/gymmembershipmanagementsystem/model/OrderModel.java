@@ -1,6 +1,8 @@
 package lk.ijse.gymmembershipmanagementsystem.model;
 
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.OrderDAO;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.OrderSupplementDAO;
+import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.OrderDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.dao.custom.impl.OrderSupplementDAOImpl;
 import lk.ijse.gymmembershipmanagementsystem.db.DBConnection;
 import lk.ijse.gymmembershipmanagementsystem.dto.OrderDTO;
@@ -17,7 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OrderModel {
-    private OrderSupplementDAO orderSupplementDAO = new OrderSupplementDAOImpl();
+    OrderSupplementDAO orderSupplementDAO = new OrderSupplementDAOImpl();
+    OrderDAO orderDAO = new OrderDAOImpl();
 
     public boolean placeOrder(OrderDTO orderDTO) throws Exception {
 
@@ -26,23 +29,12 @@ public class OrderModel {
         try {
             conn.setAutoCommit(false);
 
-            boolean isSavedOrder = CrudUtil.execute(
-                    "INSERT INTO orders (date, memberID) VALUES (?,?)",
-                    orderDTO.getOrderDate(),
-                    orderDTO.getMemberId()
-            );
+            boolean isSavedOrder = orderDAO.saveOrder(orderDTO);
 
             if (isSavedOrder) {
-                ResultSet rs = CrudUtil.execute("SELECT id FROM orders ORDER BY id DESC LIMIT 1");
-                if (rs.next()) {
-                    int latestOrderId = rs.getInt("id");
-
-                    orderSupplementDAO.saveOrderSupplement(latestOrderId, orderDTO.getOrderSupplements());
-                    printOrderInvoice(latestOrderId);
-
-                } else {
-                    throw new Exception("Something went wrong when finding order id");
-                }
+                int latestOrderId = orderDAO.getLatestOrderId();
+                orderSupplementDAO.saveOrderSupplement(latestOrderId, orderDTO.getOrderSupplements());
+                printOrderInvoice(latestOrderId);
 
             } else {
                 throw new Exception("Something went wrong when inserting order");
